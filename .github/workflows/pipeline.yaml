@@ -63,6 +63,7 @@ jobs:
 
       # Configure AWS credentials for Elastic Beanstalk
       - name: Configure AWS credentials
+        id: creds
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -78,15 +79,8 @@ jobs:
     #         --capabilities CAPABILITY_IAM \
     #         --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
 
-      - name: Deploy to Amplify Console with CloudFormation
-        id: amplify-stack
+      - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: ${{ steps.env-name.outputs.environment }}
-          template: cloudformation-template.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            Name=${{ steps.env-name.outputs.environment }},
-            Repository=https://github.com/ojunwoo/test_app4.git,
-            OauthToken=${{ secrets.AMPLIFY_TOKEN }},
-    #        Domain=${{ secrets.AMPLIFY_DOMAIN }}
+          name: MyStack
+          template: cloudformation-template.yml
