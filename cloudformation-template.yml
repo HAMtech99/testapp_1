@@ -16,7 +16,7 @@ Resources:
             amazon-linux-extras install docker
             service docker start
             usermod -a -G docker ec2-user
-            docker run -d -p 80:80 ${DockerImage}
+            docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/my_app:latest
 
   MySecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
