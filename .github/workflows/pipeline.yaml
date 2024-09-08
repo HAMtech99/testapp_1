@@ -1,0 +1,114 @@
+name: Pipeline - Build, Test, and Push Docker Image 
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main 
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v4.1.1
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my_app:latest
+
+
+  test:
+    name: Test Image
+    needs: build
+    if: ${{ needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start Docker container
+        run: |
+          docker run -d --name test-container ${{ secrets.DOCKERHUB_USERNAME }}/my_app:latest
+
+      - name: Run test command inside container
+        run: |
+          docker exec test-container ls -la /app/
+          
+      - name: Stop and remove container
+        run: |
+          docker stop test-container
+          docker rm test-container
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Configure AWS credentials for Elastic Beanstalk
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Create Dockerrun.aws.json for Elastic Beanstalk deployment
+      - name: Generate Dockerrun.aws.json
+        run: |
+          cat <<EOT >> Dockerrun.aws.json
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Image": {
+              "Name": "${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest",
+              "Update": "true"
+            },
+            "Ports": [
+              {
+                "ContainerPort": "80"
+              }
+            ]
+          }
+          EOT
+
+      # Create a zip file of Dockerrun.aws.json
+      - name: Create zip file
+        run: |
+          zip -r deploy.zip Dockerrun.aws.json
+
+      # Upload the zip file to S3
+      - name: Upload zip to S3
+        run: |
+          aws s3 cp deploy.zip s3://${{ secrets.BUCKET_NAME }}/deploy.zip
+
+
+      # Create a new Elastic Beanstalk application version
+      - name: Create Elastic Beanstalk application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name my-eb-app \
+            --version-label ${{ github.sha }} \
+            --source-bundle S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=Dockerrun.aws.json
+
+      # Deploy the new version to Elastic Beanstalk environment
+      - name: Deploy to Elastic Beanstalk environment
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name my-eb-env \
+            --version-label ${{ github.sha }}
