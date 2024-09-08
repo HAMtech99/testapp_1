@@ -68,47 +68,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
-      # Create Dockerrun.aws.json for Elastic Beanstalk deployment
-      - name: Generate Dockerrun.aws.json
+          
+     # Deploy the CloudFormation stack
+      - name: Deploy CloudFormation stack
         run: |
-          cat <<EOT >> Dockerrun.aws.json
-          {
-            "AWSEBDockerrunVersion": "1",
-            "Image": {
-              "Name": "${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest",
-              "Update": "true"
-            },
-            "Ports": [
-              {
-                "ContainerPort": "80"
-              }
-            ]
-          }
-          EOT
-
-      # Create a zip file of Dockerrun.aws.json
-      - name: Create zip file
-        run: |
-          zip -r deploy.zip Dockerrun.aws.json
-
-      # Upload the zip file to S3
-      - name: Upload zip to S3
-        run: |
-          aws s3 cp deploy.zip s3://${{ secrets.BUCKET_NAME }}/deploy.zip
-
-
-      # Create a new Elastic Beanstalk application version
-      - name: Create Elastic Beanstalk application version
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name my-eb-app \
-            --version-label ${{ github.sha }} \
-            --source-bundle S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=Dockerrun.aws.json
-
-      # Deploy the new version to Elastic Beanstalk environment
-      - name: Deploy to Elastic Beanstalk environment
-        run: |
-          aws elasticbeanstalk update-environment \
-            --environment-name my-eb-env \
-            --version-label ${{ github.sha }}
+          aws cloudformation deploy \
+            --template-file cloudformation-template.yml \
+            --stack-name my-ec2-stack \
+            --capabilities CAPABILITY_IAM \
+            --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
