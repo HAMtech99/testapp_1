@@ -67,21 +67,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-    #  # Deploy the CloudFormation stack
-    #   - name: Deploy CloudFormation stack
-    #     run: |
-    #       aws cloudformation deploy \
-    #         --template-file cloudformation-template.yml \
-    #         --stack-name my-ec2-stack \
-    #         --capabilities CAPABILITY_IAM \
-    #         --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
-
-      # Set up kubectl to interact with EKS cluster
-      - name: Set up kubectl for EKS
+     # Deploy the CloudFormation stack
+      - name: Deploy CloudFormation stack
         run: |
-          aws eks update-kubeconfig --name your-eks-cluster-name --region ${{ secrets.AWS_REGION }}
-
-      # Deploy to EKS using kubectl
-      - name: Deploy to EKS
-        run: |
-          kubectl apply -f cloudformation-template.yml
+          aws cloudformation deploy \
+            --template-file cloudformation-template.yml \
+            --stack-name my-ec2-stack \
+            --capabilities CAPABILITY_IAM \
+            --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
