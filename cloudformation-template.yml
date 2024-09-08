@@ -4,7 +4,7 @@ Resources:
     Type: "AWS::EC2::Instance"
     Properties: 
       InstanceType: "t2.micro"
-      ImageId: "ami-0c55b159cbfafe1f0"  # Replace with the latest Amazon Linux 2 AMI for your region
+      ImageId: "ami-0182f373e66f89c85" 
       KeyName: "my-key-pair"  # Replace with your EC2 key pair name
       SecurityGroupIds: 
         - !Ref MySecurityGroup

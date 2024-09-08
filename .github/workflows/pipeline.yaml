@@ -84,3 +84,12 @@ jobs:
           template: cloudformation-template.yml
           parameter-overrides: >-
             BucketName=${{ github.event.inputs.bucketName }}
+
+      # Deploy to AWS CloudFormation
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: tekloon-test-stack
+          template: cloudformation-template.yml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: "EC2InstanceType=t2.micro"
