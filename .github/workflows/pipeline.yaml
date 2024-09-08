@@ -87,6 +87,6 @@ jobs:
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             Name=${{ steps.env-name.outputs.environment }},
-            Repository=https://github.com/${{ github.repository }},
+            Repository=https://github.com/ojunwoo/test_app4.git,
             OauthToken=${{ secrets.AMPLIFY_TOKEN }},
     #        Domain=${{ secrets.AMPLIFY_DOMAIN }}
