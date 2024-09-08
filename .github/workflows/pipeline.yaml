@@ -67,11 +67,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-     # Deploy the CloudFormation stack
-      - name: Deploy CloudFormation stack
-        run: |
-          aws cloudformation deploy \
-            --template-file cloudformation-template.yml \
-            --stack-name my-ec2-stack \
-            --capabilities CAPABILITY_IAM \
-            --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+    #  # Deploy the CloudFormation stack
+    #   - name: Deploy CloudFormation stack
+    #     run: |
+    #       aws cloudformation deploy \
+    #         --template-file cloudformation-template.yml \
+    #         --stack-name my-ec2-stack \
+    #         --capabilities CAPABILITY_IAM \
+    #         --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+
+      - name: Deploy S3 Buckets CloudFormation Stacks
+        id: s3-buckets
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name:  pipline-test-bucket
+          template: cloudformation-template.yml
+          parameter-overrides: >-
+            BucketName=${{ github.event.inputs.bucketName }}

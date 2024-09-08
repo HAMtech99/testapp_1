@@ -1,35 +1,53 @@
-AWSTemplateFormatVersion: "2010-09-09"
+# AWSTemplateFormatVersion: "2010-09-09"
+# Resources:
+#   MyEC2Instance:
+#     Type: "AWS::EC2::Instance"
+#     Properties: 
+#       InstanceType: "t2.micro"
+#       ImageId: "ami-0c55b159cbfafe1f0"  # Replace with the latest Amazon Linux 2 AMI for your region
+#       KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+#       SecurityGroupIds: 
+#         - !Ref MySecurityGroup
+#       UserData: 
+#         Fn::Base64: 
+#           !Sub |
+#             #!/bin/bash
+#             yum update -y
+#             amazon-linux-extras install docker
+#             service docker start
+#             usermod -a -G docker ec2-user
+#             docker run -d -p 80:80 ${DockerImage}
+
+#   MySecurityGroup:
+#     Type: "AWS::EC2::SecurityGroup"
+#     Properties:
+#       GroupDescription: "Enable SSH and HTTP access"
+#       SecurityGroupIngress:
+#         - IpProtocol: tcp
+#           FromPort: 22
+#           ToPort: 22
+#           CidrIp: 0.0.0.0/0
+#         - IpProtocol: tcp
+#           FromPort: 80
+#           ToPort: 80
+#           CidrIp: 0.0.0.0/0
+
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: Using GitHub Actions to deploy CloudFormation stacks Demo
+
+Parameters:
+  BucketName:
+    Description: Name your Bucket
+    Type: String
+
 Resources:
-  MyEC2Instance:
-    Type: "AWS::EC2::Instance"
-    Properties: 
-      InstanceType: "t2.micro"
-      ImageId: "ami-0c55b159cbfafe1f0"  # Replace with the latest Amazon Linux 2 AMI for your region
-      KeyName: "my-key-pair"  # Replace with your EC2 key pair name
-      SecurityGroupIds: 
-        - !Ref MySecurityGroup
-      UserData: 
-        Fn::Base64: 
-          !Sub |
-            #!/bin/bash
-            yum update -y
-            amazon-linux-extras install docker
-            service docker start
-            usermod -a -G docker ec2-user
-            docker run -d -p 80:80 ${DockerImage}
-
-  MySecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+  S3Bucket:
+    Type: AWS::S3::Bucket
     Properties:
-      GroupDescription: "Enable SSH and HTTP access"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-
-
+      AccessControl: Private
+      BucketName: !Ref BucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
