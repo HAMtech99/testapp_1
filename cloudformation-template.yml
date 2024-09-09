@@ -40,8 +40,6 @@ Resources:
     Properties: 
       InstanceType: "t2.micro"
       ImageId: "ami-0182f373e66f89c85"  
-      SecurityGroupIds: 
-        - !Ref MySecurityGroup
       UserData: 
         Fn::Base64: 
           !Sub |
@@ -53,24 +51,17 @@ Resources:
             docker pull ojunwoo/my-app:latest
             docker run -d -p 80:80 my-app:latest
 
-  MySecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
-    Properties:
-      GroupDescription: "Enable SSH and HTTP access"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+  # MySecurityGroup:
+  #   Type: "AWS::EC2::SecurityGroup"
+  #   Properties:
+  #     GroupDescription: "Enable SSH and HTTP access"
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 22
+  #         ToPort: 22
+  #         CidrIp: 0.0.0.0/0
+  #       - IpProtocol: tcp
+  #         FromPort: 80
+  #         ToPort: 80
+  #         CidrIp: 0.0.0.0/0
 
-Outputs:
-  InstancePublicIP:
-    Description: The public IP address of the EC2 instance
-    Value: !GetAtt MyEC2Instance.PublicIp
-  InstancePublicDNS:
-    Description: The public DNS of the EC2 instance
-    Value: !GetAtt MyEC2Instance.PublicDnsName
