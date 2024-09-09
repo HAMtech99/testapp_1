@@ -1,34 +1,65 @@
-AWSTemplateFormatVersion: "2010-09-09"
+# AWSTemplateFormatVersion: "2010-09-09"
+# Resources:
+#   MyEC2Instance:
+#     Type: "AWS::EC2::Instance"
+#     Properties: 
+#       InstanceType: "t2.micro"
+#       ImageId: "ami-0182f373e66f89c85" 
+#       KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+#       SecurityGroupIds: 
+#         - !Ref MySecurityGroup
+#       UserData: 
+#         Fn::Base64: 
+#           !Sub |
+#             #!/bin/bash
+#             yum update -y
+#             amazon-linux-extras install docker
+#             service docker start
+#             usermod -a -G docker ec2-user
+#             docker run -d -p 80:80 ${DockerImage}
+
+#   MySecurityGroup:
+#     Type: "AWS::EC2::SecurityGroup"
+#     Properties:
+#       GroupDescription: "Enable SSH and HTTP access"
+#       SecurityGroupIngress:
+#         - IpProtocol: tcp
+#           FromPort: 22
+#           ToPort: 22
+#           CidrIp: 0.0.0.0/0
+#         - IpProtocol: tcp
+#           FromPort: 80
+#           ToPort: 80
+#           CidrIp: 0.0.0.0/0
+
+Parameters:
+  EC2InstanceType:
+    Description: The Instance Type Chosen for EC2
+    Type: String
+    
 Resources:
-  MyEC2Instance:
-    Type: "AWS::EC2::Instance"
-    Properties: 
-      InstanceType: "t2.micro"
-      ImageId: "ami-0182f373e66f89c85" 
-      KeyName: "my-key-pair"  # Replace with your EC2 key pair name
-      SecurityGroupIds: 
-        - !Ref MySecurityGroup
-      UserData: 
-        Fn::Base64: 
-          !Sub |
-            #!/bin/bash
-            yum update -y
-            amazon-linux-extras install docker
-            service docker start
-            usermod -a -G docker ec2-user
-            docker run -d -p 80:80 ${DockerImage}
-
-  MySecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+  TekLoonTestInstance:
+    Type: AWS::EC2::Instance
     Properties:
-      GroupDescription: "Enable SSH and HTTP access"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+      AvailabilityZone: ap-southeast-1a
+      ImageId: !FindInMap
+        - RegionEC2InstanceImageMap
+        - !Ref 'AWS::Region'
+        - HVM64
+      InstanceType: !Ref EC2InstanceType
+      SecurityGroups:
+        - !Ref HTTPSecurityGroup
 
+  HTTPSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable port 80 and port 443
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 80
+      - CidrIp: 0.0.0.0/0
+        FromPort: 443
+        IpProtocol: tcp
+        ToPort: 443
