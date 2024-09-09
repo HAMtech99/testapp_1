@@ -1,11 +1,57 @@
+# AWSTemplateFormatVersion: "2010-09-09"
+# Resources:
+#   MyEC2Instance:
+#     Type: "AWS::EC2::Instance"
+#     Properties: 
+#       InstanceType: "t2.micro"
+#       ImageId: "ami-0182f373e66f89c85" 
+#       KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+#       SecurityGroupIds: 
+#         - !Ref MySecurityGroup
+#       UserData: 
+#         Fn::Base64: 
+#           !Sub |
+#             #!/bin/bash
+#             yum update -y
+#             amazon-linux-extras install docker
+#             service docker start
+#             usermod -a -G docker ec2-user
+#             docker run -d -p 80:80 ${DockerImage}
+
+#   MySecurityGroup:
+#     Type: "AWS::EC2::SecurityGroup"
+#     Properties:
+#       GroupDescription: "Enable SSH and HTTP access"
+#       SecurityGroupIngress:
+#         - IpProtocol: tcp
+#           FromPort: 22
+#           ToPort: 22
+#           CidrIp: 0.0.0.0/0
+#         - IpProtocol: tcp
+#           FromPort: 80
+#           ToPort: 80
+#           CidrIp: 0.0.0.0/0
+
 AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to deploy Docker container from Docker Hub on EC2 instance
+
+Parameters:
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+
+  # DockerImage:
+  #   Description: Docker image to run (e.g., nginx:latest)
+  #   Type: String
+  #   Default: "nginx:latest"
+
 Resources:
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
     Properties: 
       InstanceType: "t2.micro"
-      ImageId: "ami-0182f373e66f89c85" 
-      KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+      ImageId: "ami-0182f373e66f89c85"  
+      KeyName: !Ref KeyName
       SecurityGroupIds: 
         - !Ref MySecurityGroup
       UserData: 
@@ -16,7 +62,8 @@ Resources:
             amazon-linux-extras install docker
             service docker start
             usermod -a -G docker ec2-user
-            docker run -d -p 80:80 ${DockerImage}
+            docker pull ojunwoo/my-app:latest
+            docker run -d -p 80:80 my-app:latest
 
   MySecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
@@ -32,3 +79,10 @@ Resources:
           ToPort: 80
           CidrIp: 0.0.0.0/0
 
+Outputs:
+  InstancePublicIP:
+    Description: The public IP address of the EC2 instance
+    Value: !GetAtt MyEC2Instance.PublicIp
+  InstancePublicDNS:
+    Description: The public DNS of the EC2 instance
+    Value: !GetAtt MyEC2Instance.PublicDnsName

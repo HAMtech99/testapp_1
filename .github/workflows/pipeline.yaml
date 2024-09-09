@@ -75,4 +75,4 @@ jobs:
           --stack-name my-ec2-stack \
           --s3-bucket pipline-test-bucket \
           --capabilities CAPABILITY_IAM \
-          --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+          
