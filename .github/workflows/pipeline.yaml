@@ -72,7 +72,7 @@ jobs:
         run: |
           aws cloudformation deploy \
           --template-file cloudformation-template.yml \
-          --stack-name my-ec2-stack2 \
+          --stack-name my-ec2-stack \
           --s3-bucket pipline-test-bucket \
           --capabilities CAPABILITY_IAM \
           
