@@ -67,12 +67,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-     # Deploy the CloudFormation stack
-      - name: Deploy CloudFormation stack
-        run: |
-          aws cloudformation deploy \
-          --template-file cloudformation-template.yml \
-          --stack-name my-ec2-stack2 \
-          --s3-bucket pipline-test-bucket \
+    #  # Deploy the CloudFormation stack
+    #   - name: Deploy CloudFormation stack
+    #     run: |
+    #       aws cloudformation deploy \
+    #       --template-file cloudformation-template.yml \
+    #       --stack-name my-ec2-stack \
+    #       --s3-bucket pipline-test-bucket \
 
-          
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: MyStack
+          template: cloudformation-template.yml
+          parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"
