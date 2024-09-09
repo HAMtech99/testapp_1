@@ -1,4 +1,4 @@
-name: Pipeline - Build, Test, and Push Docker Image 
+name: Pipeline - Build, Push, Test, and deploy CloudFormation Stack 
 
 on:
   push:
