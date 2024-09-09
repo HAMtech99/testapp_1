@@ -71,8 +71,8 @@ jobs:
       - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
-            --template-file cloudformation-template.yml \
-            --stack-name my-ec2-stack \
-            --s3-bucket pipline-test-bucket \
-            --capabilities CAPABILITY_IAM \
-            --parameter-overrides ParameterKey=DockerImage,ParameterValue=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+          --template-file cloudformation-template.yml \
+          --stack-name my-ec2-stack \
+          --s3-bucket pipline-test-bucket \
+          --capabilities CAPABILITY_IAM \
+          --parameter-overrides ParameterKey=DockerImage,ParameterValue=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
