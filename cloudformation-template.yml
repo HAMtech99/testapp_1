@@ -34,17 +34,6 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
 Description: CloudFormation template to deploy Docker container from Docker Hub on EC2 instance
-
-Parameters:
-  KeyName:
-    Description: The EC2 Key Pair to allow SSH access to the instance
-    Type: AWS::EC2::KeyPair::KeyName
-
-  # DockerImage:
-  #   Description: Docker image to run (e.g., nginx:latest)
-  #   Type: String
-  #   Default: "nginx:latest"
-
 Resources:
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
