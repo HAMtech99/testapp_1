@@ -41,6 +41,6 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: "t2.micro"
-      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 AMI (replace with the latest AMI in your region)
+      ImageId: "ami-0182f373e66f89c85"  # Amazon Linux 2 AMI (replace with the latest AMI in your region)
 
 
