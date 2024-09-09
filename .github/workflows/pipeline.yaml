@@ -79,6 +79,7 @@ jobs:
       - name: Deploy with CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
+          name: ${{ steps.env-name.outputs.environment }}
           template: cloudformation-template.yml
           no-fail-on-empty-changeset: "2"
           parameter-overrides: DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
