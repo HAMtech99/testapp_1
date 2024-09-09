@@ -1,23 +1,23 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Resources:
-  MyEC2Instance:
-    Type: "AWS::EC2::Instance"
-    Properties: 
-      InstanceType: "t2.micro"
-      ImageId: "ami-0182f373e66f89c85" 
-      KeyName: "my-key-pair"  # Replace with your EC2 key pair name
-      # SecurityGroupIds: 
-      #   - !Ref MySecurityGroup
-      UserData: 
-        Fn::Base64: 
-          !Sub |
-            #!/bin/bash
-            yum update -y
-            amazon-linux-extras install docker
-            service docker start
-            usermod -a -G docker ec2-user
-            docker pull ojunwoo/my-app:latest
-            docker run -d -p 80:80 my-app:latest
+# AWSTemplateFormatVersion: "2010-09-09"
+# Resources:
+#   MyEC2Instance:
+#     Type: "AWS::EC2::Instance"
+#     Properties: 
+#       InstanceType: "t2.micro"
+#       ImageId: "ami-0182f373e66f89c85" 
+#       KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+#       SecurityGroupIds: 
+#         - !Ref MySecurityGroup
+#       UserData: 
+#         Fn::Base64: 
+#           !Sub |
+#             #!/bin/bash
+#             yum update -y
+#             amazon-linux-extras install docker
+#             service docker start
+#             usermod -a -G docker ec2-user
+#             docker pull ojunwoo/my-app:latest
+#             docker run -d -p 80:80 my-app:latest
 
   # MySecurityGroup:
   #   Type: "AWS::EC2::SecurityGroup"
@@ -32,3 +32,33 @@ Resources:
   #         FromPort: 80
   #         ToPort: 80
   #         CidrIp: 0.0.0.0/0
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Lab2 WorkingStack Environment
+
+Parameters:
+
+  AmazonLinuxAMIID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2
+
+Resources:
+  #App Server Definitions
+  AppServer1:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: !Join
+        - ''
+        - - !Ref AWS::Region
+          - a
+      ImageId: !Ref AmazonLinuxAMIID
+      InstanceType: t3.micro
+      SecurityGroupIds:
+        - !ImportValue AppSGOutput
+      SubnetId: !ImportValue LabSubnetOutput
+      Tags:
+        - Key: Project
+          Value: Working
+        - Key: Name
+          Value: AppServer1
