@@ -5,7 +5,7 @@ Resources:
     Properties: 
       InstanceType: "t2.micro"
       ImageId: "ami-0182f373e66f89c85" 
-      KeyName: "my-key-pair"  # Replace with your EC2 key pair name
+      # KeyName: "my-key-pair"  # Replace with your EC2 key pair name
       SecurityGroupIds: 
         - !Ref MySecurityGroup
       UserData: 
@@ -24,10 +24,10 @@ Resources:
     Properties:
       GroupDescription: "Enable SSH and HTTP access"
       SecurityGroupIngress:
-        # - IpProtocol: tcp
-        #   FromPort: 22
-        #   ToPort: 22
-        #   CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
