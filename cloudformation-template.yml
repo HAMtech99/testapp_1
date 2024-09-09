@@ -92,7 +92,7 @@ Resources:
             service docker start
             usermod -a -G docker ec2-user
             docker pull ojunwoo/my-app:latest
-            docker run -d -p 80:80 my-app:latest
+            docker run -d -p 8080:5000 my-app:latest
 
 
   # EC2Instance:
