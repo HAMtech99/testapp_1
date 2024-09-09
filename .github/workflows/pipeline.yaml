@@ -74,5 +74,5 @@ jobs:
           --template-file cloudformation-template.yml \
           --stack-name my-ec2-stack \
           --s3-bucket pipline-test-bucket \
-          --capabilities CAPABILITY_IAM \
+
           
