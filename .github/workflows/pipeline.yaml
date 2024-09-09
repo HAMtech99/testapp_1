@@ -81,4 +81,4 @@ jobs:
         with:
           template: cloudformation-template.yml
           no-fail-on-empty-changeset: "2"
-          --parameter-overrides DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+          parameter-overrides: DockerImage=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
