@@ -94,20 +94,20 @@ Resources:
       SubnetId: !Ref PublicSubnet
       RouteTableId: !Ref RouteTable
 
-  SecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
-    Properties:
-      GroupDescription: "Enable SSH and HTTP access"
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+  # SecurityGroup:
+  #   Type: "AWS::EC2::SecurityGroup"
+  #   Properties:
+  #     GroupDescription: "Enable SSH and HTTP access"
+  #     VpcId: !Ref VPC
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 22
+  #         ToPort: 22
+  #         CidrIp: 0.0.0.0/0
+  #       - IpProtocol: tcp
+  #         FromPort: 80
+  #         ToPort: 80
+  #         CidrIp: 0.0.0.0/0
 
   EC2Instance:
     Type: "AWS::EC2::Instance"
@@ -115,8 +115,8 @@ Resources:
       InstanceType: "t2.micro"
       ImageId: "ami-0182f373e66f89c85" 
       SubnetId: !Ref PublicSubnet
-      SecurityGroupIds:
-        - !Ref SecurityGroup
+      # SecurityGroupIds:
+      #   - !Ref SecurityGroup
       UserData: 
         Fn::Base64: 
           !Sub |
