@@ -80,4 +80,4 @@ jobs:
         with:
           name: MyStack
           template: cloudformation-template.yml
-          parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"
+          no-fail-on-empty-changeset: "1"
