@@ -40,7 +40,6 @@ Resources:
     Properties: 
       InstanceType: "t2.micro"
       ImageId: "ami-0182f373e66f89c85"  
-      KeyName: !Ref KeyName
       SecurityGroupIds: 
         - !Ref MySecurityGroup
       UserData: 
