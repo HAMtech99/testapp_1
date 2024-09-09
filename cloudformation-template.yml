@@ -56,11 +56,11 @@ Resources:
         - Key: "Name"
           Value: "MyInternetGateway"
 
-  # AttachGateway:
-  #   Type: "AWS::EC2::VPCGatewayAttachment"
-  #   Properties:
-  #     VpcId: !Ref VPC
-  #     InternetGatewayId: !Ref InternetGateway
+  AttachGateway:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
 
   PublicSubnet:
     Type: "AWS::EC2::Subnet"
@@ -88,11 +88,11 @@ Resources:
       DestinationCidrBlock: "0.0.0.0/0"
       GatewayId: !Ref InternetGateway
 
-  # SubnetRouteTableAssociation:
-  #   Type: "AWS::EC2::SubnetRouteTableAssociation"
-  #   Properties:
-  #     SubnetId: !Ref PublicSubnet
-  #     RouteTableId: !Ref RouteTable
+  SubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref RouteTable
 
   SecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
