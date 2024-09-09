@@ -5,9 +5,9 @@ Resources:
     Properties: 
       InstanceType: "t2.micro"
       ImageId: "ami-0182f373e66f89c85" 
-      # KeyName: "my-key-pair"  # Replace with your EC2 key pair name
-      SecurityGroupIds: 
-        - !Ref MySecurityGroup
+      # KeyName: "my-key-pair"  
+      # SecurityGroupIds: 
+      #   - !Ref MySecurityGroup
       UserData: 
         Fn::Base64: 
           !Sub |
@@ -19,18 +19,18 @@ Resources:
             docker pull ojunwoo/my-app:latest
             docker run -d -p 80:80 my-app:latest
 
-  MySecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
-    Properties:
-      GroupDescription: "Enable SSH and HTTP access"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+  # MySecurityGroup:
+  #   Type: "AWS::EC2::SecurityGroup"
+  #   Properties:
+  #     GroupDescription: "Enable SSH and HTTP access"
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 22
+  #         ToPort: 22
+  #         CidrIp: 0.0.0.0/0
+  #       - IpProtocol: tcp
+  #         FromPort: 80
+  #         ToPort: 80
+  #         CidrIp: 0.0.0.0/0
 
 
