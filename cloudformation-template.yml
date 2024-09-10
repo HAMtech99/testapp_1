@@ -93,21 +93,21 @@ Resources:
           !Sub |
             #!/bin/bash
             #Update system
-            sudo dnf update -y
-            sudo dnf install docker -y
+            dnf update -y
+            dnf install docker -y
 
             #start and enable docker
-            sudo systemctl start docker
-            sudo systemctl enable docker
+            systemctl start docker
+            systemctl enable docker
 
             #Add ec2-user to the docker group
             usermod -a -G docker ec2-user
 
-            # Pull docker image
-            sudo docker pull cloudkid99/testapp_1
+            #Pull docker image
+            docker pull cloudkid99/testapp_1
 
-            # Run the docker container and expose port 80
-            sudo docker run -d -p 80:80 cloudkid99/testapp_1
+            #Run the docker container and expose port 80
+            docker run -d -p 80:80 cloudkid99/testapp_1
 
 Outputs:
   InstancePublicIP:
