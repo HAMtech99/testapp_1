@@ -75,8 +75,8 @@ Resources:
            CidrIp: 0.0.0.0/0
            
 
-  EC2Instance:
-   Testappinstance:
+  
+  Testappinstance:
     Type: "AWS::EC2::Instance"
     Properties:
       InstanceType: "t2.micro"
