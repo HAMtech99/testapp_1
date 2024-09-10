@@ -105,13 +105,13 @@ Resources:
 Outputs:
   InstancePublicIP:
     Description: "Public IP of the EC2 instance"
-    Value: !GETatt
-    -Testappinstance.PublicIP
+    Value: !GetAtt
+  Testappinstance.PublicIP
 
 
 
 
-  # EC2Instance:
+  #EC2Instance:
   #   Type: "AWS::EC2::Instance"
   #   Properties:
   #     InstanceType: "t2.micro"
