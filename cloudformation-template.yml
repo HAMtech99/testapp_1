@@ -76,13 +76,16 @@ Resources:
            
 
   
-  Testappinstance:
+  EC2Instance:
     Type: "AWS::EC2::Instance"
     Properties:
       InstanceType: "t2.micro"
       ImageId: "ami-0bfddf4206f1fa7b9"
       SubnetId: !Ref PublicSubnet
-      # KeyName: "my-key-pair"  
+      KeyName: "mytestappssh"  
+      Tags:
+        - Key: Name
+          Value: "Testappinstance"
       SecurityGroupIds:
          - !Ref SecurityGroup
       UserData: 
