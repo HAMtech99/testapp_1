@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, session, request
-
+PORT=80
+HOST="0.0.0.0"
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Used for session management
 
@@ -38,4 +39,4 @@ def clear_cart():
     return redirect(url_for('cart'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host=HOST,port=PORT)
