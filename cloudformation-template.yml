@@ -105,8 +105,7 @@ Resources:
 Outputs:
   InstancePublicIP:
     Description: "Public IP of the EC2 instance"
-    Value: !GetAtt
-  Testappinstance.PublicIP
+    Value: !GetAtt Testappinstance.PublicIp
 
 
 
