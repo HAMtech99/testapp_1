@@ -12,14 +12,14 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: "Name"
-          Value: "MyVPC"
+          Value: "testappvpc"
 
   InternetGateway:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: "Name"
-          Value: "MyInternetGateway"
+          Value: "testappigw"
 
   AttachGateway:
     Type: "AWS::EC2::VPCGatewayAttachment"
@@ -36,7 +36,7 @@ Resources:
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
       Tags:
         - Key: "Name"
-          Value: "MyPublicSubnet"
+          Value: "testapp-publicsubnet"
 
   RouteTable:
     Type: "AWS::EC2::RouteTable"
@@ -44,7 +44,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: "Name"
-          Value: "MyRouteTable"
+          Value: "testapp-routetable"
 
   PublicRoute:
     Type: "AWS::EC2::Route"
@@ -113,26 +113,3 @@ Outputs:
   InstancePublicIP:
     Description: "Public IP of the EC2 instance"
     Value: !GetAtt EC2Instance.PublicIp
-
-
-
-
-  #EC2Instance:
-  #   Type: "AWS::EC2::Instance"
-  #   Properties:
-  #     InstanceType: "t2.micro"
-  #     ImageId: "ami-0182f373e66f89c85" 
-  #     SubnetId: !Ref PublicSubnet
-  #     # KeyName: "my-key-pair"  
-  #     # SecurityGroupIds:
-  #     #   - !Ref SecurityGroup
-  #     UserData: 
-  #       Fn::Base64: 
-  #         !Sub |
-  #           #!/bin/bash
-  #           yum update -y
-  #           amazon-linux-extras install docker
-  #           service docker start
-  #           usermod -a -G docker ec2-user
-  #           docker pull ojunwoo/my-app:latest
-  #           docker run -d -p 80:80 my-app:latest
