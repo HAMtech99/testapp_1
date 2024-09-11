@@ -12,14 +12,14 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: "Name"
-          Value: "testappvpc"
+          Value: "testapp2.0_vpc"
 
   InternetGateway:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: "Name"
-          Value: "testappigw"
+          Value: "testapp2.0_igw"
 
   AttachGateway:
     Type: "AWS::EC2::VPCGatewayAttachment"
@@ -27,7 +27,7 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
-  PublicSubnet:
+  PublicSubnet-1:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref VPC
@@ -36,7 +36,18 @@ Resources:
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
       Tags:
         - Key: "Name"
-          Value: "testapp-publicsubnet"
+          Value: "testapp2.0-publicsubnet"
+
+  PublicSubnet-2:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
+      Tags:
+        - Key: "Name"
+          Value: "testapp2.0-publicsubnet2"
 
   RouteTable:
     Type: "AWS::EC2::RouteTable"
@@ -44,7 +55,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: "Name"
-          Value: "testapp-routetable"
+          Value: "testapp2.0-routetable"
 
   PublicRoute:
     Type: "AWS::EC2::Route"
@@ -85,7 +96,7 @@ Resources:
       KeyName: "mytestappssh"  
       Tags:
         - Key: Name
-          Value: "Testappinstance"
+          Value: "Testappinstance2.0"
       SecurityGroupIds:
          - !Ref SecurityGroup
       UserData: 
