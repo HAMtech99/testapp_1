@@ -12,14 +12,14 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: "Name"
-          Value: "testapp2.0_vpc"
+          Value: "testapp1_vpc"
 
   InternetGateway:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: "Name"
-          Value: "testapp2.0_igw"
+          Value: "testapp1_igw"
 
   AttachGateway:
     Type: "AWS::EC2::VPCGatewayAttachment"
@@ -27,7 +27,7 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
-  PublicSubnet-1:
+  PublicSubnet1:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref VPC
@@ -36,9 +36,9 @@ Resources:
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
       Tags:
         - Key: "Name"
-          Value: "testapp2.0-publicsubnet"
+          Value: "testapp1-publicsubnet"
 
-  PublicSubnet-2:
+  PublicSubnet2:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref VPC
@@ -47,7 +47,7 @@ Resources:
       AvailabilityZone: !Select [ 1, !GetAZs "" ]
       Tags:
         - Key: "Name"
-          Value: "testapp2.0-publicsubnet2"
+          Value: "testapp1-publicsubnet2"
 
   RouteTable:
     Type: "AWS::EC2::RouteTable"
@@ -55,7 +55,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: "Name"
-          Value: "testapp2.0-routetable"
+          Value: "testapp1-routetable"
 
   PublicRoute:
     Type: "AWS::EC2::Route"
@@ -92,11 +92,49 @@ Resources:
     Properties:
       InstanceType: "t2.micro"
       ImageId: "ami-0bfddf4206f1fa7b9"
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
       KeyName: "mytestappssh"  
       Tags:
         - Key: Name
-          Value: "Testappinstance2.0"
+          Value: "Testappinstance1"
+     
+      SecurityGroupIds:
+         - !Ref SecurityGroup
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            #Update system
+            dnf update -y
+            dnf install docker -y
+
+            #start and enable docker
+            systemctl start docker
+            systemctl enable docker
+
+            #Add ec2-user to the docker group
+            usermod -a -G docker ec2-user
+
+            #Pull docker image
+            docker pull cloudkid99/testapp_1
+
+            #Run the docker container and expose port 80
+            docker run -d -p 80:80 cloudkid99/testapp_1
+
+          
+          
+
+  EC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-0bfddf4206f1fa7b9"
+      SubnetId: !Ref PublicSubnet2
+      KeyName: "mytestappssh"  
+      Tags:
+        - Key: Name
+          Value: "Testappinstance2"
+
       SecurityGroupIds:
          - !Ref SecurityGroup
       UserData: 
