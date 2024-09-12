@@ -106,12 +106,12 @@ Resources:
       InstanceType: "t2.micro"
       ImageId: "ami-0bfddf4206f1fa7b9"
       SubnetId: !Ref PublicSubnet1
-      KeyName: "my-key-pair"  
+      KeyName: "mytestappssh"  
       SecurityGroupIds:
         - !Ref SecurityGroup
       Tags:
         - Key: "Name"
-          Value: "Test1"
+          Value: "Testapp1"
       UserData: 
         Fn::Base64: !Sub |
             #!/bin/bash
@@ -126,7 +126,7 @@ Resources:
             sudo systemctl enable docker
 
             # Pull docker image
-            sudo docker pull ojunwoo/testapp_1
+            sudo docker pull cloudkid99/testapp_1
 
             # Run the docker container and expose port 80
             sudo docker run -d -p 80:80 cloudkid99/testapp_1
@@ -142,7 +142,7 @@ Resources:
         - !Ref SecurityGroup
       Tags:
         - Key: "Name"
-          Value: "Test2"
+          Value: "Tetsapp2"
       UserData: 
         Fn::Base64: !Sub |
             #!/bin/bash
@@ -157,10 +157,10 @@ Resources:
             sudo systemctl enable docker
 
             # Pull docker image
-            sudo docker pull ojunwoo/testapp_1
+            sudo docker pull cloudkid99/testapp_1
 
             # Run the docker container and expose port 80
-            sudo docker run -d -p 80:80 ojunwoo/testapp_1
+            sudo docker run -d -p 80:80 cloudkid99/testapp_1
 
 Outputs:
   VPCId:
