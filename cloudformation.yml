@@ -35,7 +35,7 @@ Resources:
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpCId: !Ref VPC
+      VpcId: !Ref VPC
       CidrBlock: "10.0.1.0/24"
       MapPublicOnLaunch: true
       AvailabilityZone: us-west-2a
@@ -185,7 +185,7 @@ Resources:
       NotificationTargetARN: !Ref ALBTargetGroup
 
   Outputs:
-    VPCId:
+    VpcId:
       Description: The VPC ID
       Value: !Ref VPC
 
