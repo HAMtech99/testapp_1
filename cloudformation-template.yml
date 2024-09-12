@@ -27,7 +27,7 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
-  PublicSubnet1:
+  PublicSubnet:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref VPC
@@ -38,7 +38,7 @@ Resources:
         - Key: "Name"
           Value: "testapp1-publicsubnet"
 
-  PublicSubnet2:
+  PublicSubnet:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref VPC
@@ -67,7 +67,7 @@ Resources:
   SubnetRouteTableAssociation:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
       RouteTableId: !Ref RouteTable
 
   SecurityGroup:
