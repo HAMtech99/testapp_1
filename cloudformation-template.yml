@@ -129,7 +129,7 @@ Resources:
             sudo docker pull ojunwoo/testapp_1
 
             # Run the docker container and expose port 80
-            sudo docker run -d -p 80:80 ojunwoo/testapp_1
+            sudo docker run -d -p 80:80 cloudkid99/testapp_1
 
   EC2Instance2:
     Type: "AWS::EC2::Instance"
@@ -137,7 +137,7 @@ Resources:
       InstanceType: "t2.micro"
       ImageId: "ami-0bfddf4206f1fa7b9"
       SubnetId: !Ref PublicSubnet2
-      KeyName: "my-key-pair"  
+      KeyName: "mytestappssh"  
       SecurityGroupIds:
         - !Ref SecurityGroup
       Tags:
