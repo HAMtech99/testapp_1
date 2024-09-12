@@ -17,13 +17,13 @@ Resources:
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
-      VpcId: !Ref VPC
       CidrBlock: "10.0.0.0/24"
       MapPublicOnLaunch: true
       AvailabilityZone: us-west-2a
       Tags:
         -Key: Name
         Value: WebAppInternetGateway
+        
 # Attach VPC to IGW
   VPCGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
