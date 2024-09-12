@@ -34,7 +34,7 @@ Resources:
 # Public subnet us-west-2a
   PublicSubnet1:
     Type: AWS::EC2::Subnet
-    Proeprties:
+    Properties:
       VpCId: !Ref VPC
       CidrBlock: "10.0.1.0/24"
       MapPublicOnLaunch: true
