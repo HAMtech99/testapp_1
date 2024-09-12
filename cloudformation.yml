@@ -13,7 +13,7 @@ Resources:
         - Key: Name
           Value: WebAppVpc
 
-#IGW Creation
+# IGW Creation
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
@@ -23,16 +23,15 @@ Resources:
       AvailabilityZone: us-west-2a
       Tags:
         -Key: Name
-        Value:WebAppInternetGateway
-
-#Attach IGW to VPC
+        Value: WebAppInternetGateway
+# Attach VPC to IGW
   VPCGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref VPC
       InternetGateway: !Ref InternetGateway
 
-#Public subnet us-west-2a
+# Public subnet us-west-2a
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Proeprties:
@@ -44,7 +43,7 @@ Resources:
         -Key: Name
         Value: WebbAppPublicSubnet1
 
-#Public subnet us-west-2b
+# Public subnet us-west-2b
   PublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
@@ -56,7 +55,7 @@ Resources:
         - Key: Name
           Value: WebAppPublicSubnet2
 
-#Route table for VPC
+# Route table for VPC
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -65,21 +64,21 @@ Resources:
         - Key: Name
           Value: WebAppPublicRouteTable
     
-#Associate Public Subnet 1 with Route Table
+# Associate Public Subnet 1 with Route Table
   PublicSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
      SubnetId: !Ref PublicSubnet1
      RouteTableId: !Ref PublicRouteTable
   
-  #Associate Public Subnet 2 with Route Table
+# Associate Public Subnet 2 with Route Table
   PublicSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
      SubnetId: !Ref PublicSubnet2
      RouteTableId: !Ref PublicRouteTable
 
-#Route to the internet
+# Route to the internet
   PublicRoute:
     Type: AWS::EC2::Route
     Properties:
@@ -87,7 +86,7 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
-#Security group for Web App
+# Security group for Web App
   WebAppSecurityGroup:
     Type: AWS:EC2::SecurityGroup
     Properties:
@@ -103,7 +102,7 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
 
-#Launch Template for EC2 Instances
+# Launch Template for EC2 Instances
   WebAppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
@@ -121,24 +120,24 @@ Resources:
             Tags: Name
             Value: WebAppInstance
 
-#ASG for EC2 instances
+# ASG for EC2 instances
   WebAppAutoScalingGroup:
-  Type: AWS::AutoScaling::AutoScalingGroup
-  Properties:
-    LaunchTemplate:
-      LaunchTemplateId: !Ref WebAppLaunchTemplate.LatestVersionNumber
-  MinSize: 2
-  MaxSize: 2
-  DesiredCapacity: 2
-  VPCZoneIdenitifer:
-    - !Ref PublicSubnet1
-    - !Ref PublicSubnet2
-  Tags:
-    - Key: Name
-      Value: WebAppInstance
-      PropagateAtLaunch: true
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebAppLaunchTemplate.LatestVersionNumber
+      MinSize: 2
+      MaxSize: 2
+      DesiredCapacity: 2
+      VPCZoneIdenitifer:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: WebAppInstance
+          PropagateAtLaunch: true
 
-#Appication Load Balancer
+# Appication Load Balancer
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties: 
@@ -150,7 +149,7 @@ Resources:
         - !GetAtt WebAppSecurityGroup.GroupId
       Scheme: internet-facing
 
-#Target Group for ALB
+# Target Group for ALB
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -164,7 +163,7 @@ Resources:
       Matcher:
         HttpCode: 200-399
 
-#Listener for ALB
+# Listener for ALB
   ALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -175,7 +174,7 @@ Resources:
         - Type: forward
           TargetGroupARN: !Ref ALBTargetGroup
 
-#ASG to ALB Target group attachment
+# ASG to ALB Target group attachment
   ASGToALBAttachment:
     Type: AWS::Autoscaling::LifecylceHook
     Properties:
