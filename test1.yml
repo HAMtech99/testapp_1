@@ -133,7 +133,7 @@ Resources:
     Properties:
       LaunchTemplateName: TestappAutoScaling
       LaunchTemplateData:
-        ImageId: ami-0f08923e56e1e1cfe
+        ImageId: ami-0bfddf4206f1fa7b9
         InstanceType: t2.micro
         KeyName: "mytestappssh"
         NetworkInterfaces: 
@@ -141,6 +141,24 @@ Resources:
             AssociatePublicIpAddress: true
             Groups:
               - !Ref WebServerSecurityGroup
+        UserData: 
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            #Update system
+            sudo dnf update -y
+            
+            #Install docker
+            sudo dnf install docker -y
+
+            #start and enable docker
+            sudo systemctl start docker
+            sudo systemctl enable docker
+
+            # Pull docker image
+            sudo docker pull cloudkid99/testapp_1
+
+            # Run the docker container and expose port 80
+            sudo docker run -d --restart unless-stopped -p 80:80 cloudkid99/testapp_1
 
 
   AutoScalingGroup:
@@ -149,11 +167,13 @@ Resources:
     Properties:
       MinSize: '1'
       MaxSize: '2'
-      DesiredCapacity: '1'
+      DesiredCapacity: '2'
       LaunchTemplate:
         LaunchTemplateId: !Ref TestappCloudFormationLaunchTemplate
         Version: !GetAtt TestappCloudFormationLaunchTemplate.LatestVersionNumber
       HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+
       VPCZoneIdentifier:
         - !Ref PublicSubnet1
         - !Ref PublicSubnet2
@@ -240,7 +260,7 @@ Outputs:
 
   PublicSubnets:
     Description: List of public subnets
-    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2, !Ref PublicSubnet3 ]]
+    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
 
   PublicSubnet1:
     Description: Reference to public subnet in 1st Availability Zone
