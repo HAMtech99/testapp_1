@@ -2,28 +2,12 @@ Description:  Testapp CloudFormation template to deploy a VPC with two public su
   across three Availability Zones. Also to create an auto scaling group and application load balancer.
 
 
-  VPCCIDR: 
-    Description: Enter CIDR notation for VPC
-    Type: String
-    Default: 10.10.0.0/16
-
-  PublicSubnet1CIDR: 
-    Description: Enter CIDR notation for public subnet in first Availability Zone
-    Type: String
-    Default: 10.10.1.0/24
- 
-  PublicSubnet2CIDR: 
-    Description: Enter CIDR notation for public subnet in second Availability Zone
-    Type: String
-    Default: 10.10.2.0/24
-
-
 Resources:
   VPC:
     Type: AWS::EC2::VPC
     DeletionPolicy: Delete
     Properties:
-      CidrBlock: !Ref VPCCIDR
+      CidrBlock: 10.10.0.0/16
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
@@ -51,7 +35,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CidrBlock: !Ref PublicSubnet1CIDR
+      CidrBlock: 10.10.1.0/24
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -63,7 +47,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      CidrBlock: !Ref PublicSubnet2CIDR
+      CidrBlock: 10.10.2.0/24
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
