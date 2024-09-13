@@ -1,7 +1,6 @@
 Description:  Testapp CloudFormation template to deploy a VPC with two public subnets spread
   across three Availability Zones. Also to create an auto scaling group and application load balancer.
 
-
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -147,7 +146,7 @@ Resources:
     Properties:
       MinSize: '1'
       MaxSize: '2'
-      DesiredCapacity: '2'
+      DesiredCapacity: '1'
       LaunchTemplate:
         LaunchTemplateId: !Ref TestappCloudFormationLaunchTemplate
         Version: !GetAtt TestappCloudFormationLaunchTemplate.LatestVersionNumber
@@ -160,42 +159,6 @@ Resources:
 
       TargetGroupARNs: 
         - !Ref ALBTargetGroups
-
-  cpuUsage:
-    Type: AWS::AutoScaling::ScalingPolicy
-    Properties:
-      AutoScalingGroupName: !Ref AutoScalingGroup
-      PolicyType: TargetTrackingScaling
-      TargetTrackingConfiguration:
-        PredefinedMetricSpecification:
-          PredefinedMetricType: ASGAverageCPUUtilization
-        TargetValue: 50
-
-  ScalingPolicy:
-    Type: 'AWS::AutoScaling::ScalingPolicy'
-    Properties:
-      AdjustmentType: ChangeInCapacity
-      AutoScalingGroupName: !Ref AutoScalingGroup
-      ScalingAdjustment: '1'
-   
-  CloudWatchAlarm:
-    Type: 'AWS::CloudWatch::Alarm'
-    Properties:
-      EvaluationPeriods: '1'
-      Statistic: Average
-      Threshold: '50'
-      AlarmDescription: Alarm if CPU higher than 50%
-      Period: '60'
-      AlarmActions:
-        - !Ref ScalingPolicy
-      Namespace: AWS/EC2
-      Dimensions:
-        - Name: AutoScalingGroupName
-          Value:
-            Ref: AutoScalingGroup
-      ComparisonOperator: GreaterThanThreshold
-      MetricName: CPUUtilization
-
 
   ALBTargetGroups:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
