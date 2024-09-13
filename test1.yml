@@ -166,10 +166,6 @@ Resources:
       VpcId: !Ref VPC
       TargetType: instance
       HealthCheckPath: /
-      HealthCheckIntervalSeconds: 30
-      HealthCheckTimeOutSeconds: 10
-      HealthyThresholdCount: 3
-      UnhealthyThresholdCount: 3
       Port: 80
       Protocol: HTTP
       Tags:
