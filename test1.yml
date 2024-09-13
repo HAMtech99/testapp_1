@@ -39,7 +39,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+          Value: Public Subnet (AZ1)
 
   PublicSubnet2:
     Type: AWS::EC2::Subnet
@@ -51,7 +51,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+          Value: Public Subnet (AZ2)
 
 
   PublicRouteTable:
@@ -61,7 +61,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Routes
+          Value: Public Routes
 
   DefaultPublicRoute:
     Type: AWS::EC2::Route
@@ -105,7 +105,7 @@ Resources:
         CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Allow SSH HTTP
+          Value: Allow SSH HTTP
 
   TestappCloudFormationLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
