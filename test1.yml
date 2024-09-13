@@ -1,10 +1,6 @@
 Description:  Testapp CloudFormation template to deploy a VPC with two public subnets spread
   across three Availability Zones. Also to create an auto scaling group and application load balancer.
 
-Parameters: 
-  EnvironmentName: 
-    Description: TestappCloudFormation
-    Type: String
 
   VPCCIDR: 
     Description: Enter CIDR notation for VPC
