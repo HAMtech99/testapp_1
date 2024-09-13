@@ -146,7 +146,7 @@ Resources:
     Properties:
       MinSize: '1'
       MaxSize: '2'
-      DesiredCapacity: '1'
+      DesiredCapacity: '2'
       LaunchTemplate:
         LaunchTemplateId: !Ref TestappCloudFormationLaunchTemplate
         Version: !GetAtt TestappCloudFormationLaunchTemplate.LatestVersionNumber
@@ -165,7 +165,11 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       TargetType: instance
-      HealthCheckPath: /index.html
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeOutSeconds: 10
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 3
       Port: 80
       Protocol: HTTP
       Tags:
