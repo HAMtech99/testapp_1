@@ -72,7 +72,7 @@ jobs:
         run: |
           aws cloudformation deploy \
           --template-file test2.yml \
-          --stack-name testapp1-stack \
+          --stack-name testapp2-stack \
           --s3-bucket pipline-test-bucket \
 
       # - name: Deploy to AWS CloudFormation
