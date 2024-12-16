@@ -113,6 +113,7 @@ Resources:
       LaunchTemplateName: TestappAutoScaling
       LaunchTemplateData:
         ImageId: ami-0453ec754f44f9a4a
+        version: $Latest
         InstanceType: t2.micro
         KeyName: "testapp1key"
         NetworkInterfaces: 
