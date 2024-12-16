@@ -114,7 +114,7 @@ Resources:
       LaunchTemplateData:
         ImageId: ami-0453ec754f44f9a4a
         InstanceType: t2.micro
-        KeyName: "testapp1-key"
+        KeyName: "testapp1key"
         NetworkInterfaces: 
           - DeviceIndex: 0
             AssociatePublicIpAddress: true
