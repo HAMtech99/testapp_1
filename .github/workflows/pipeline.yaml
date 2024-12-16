@@ -73,7 +73,7 @@ jobs:
           aws cloudformation deploy \
           --template-file test2.yml \
           --stack-name testapp2-stack \
-          --s3-bucket pipline-test-bucket \
+          --s3-bucket pipeline-testapp1-bucket \
 
       # - name: Deploy to AWS CloudFormation
       #   uses: aws-actions/aws-cloudformation-github-deploy@v1
