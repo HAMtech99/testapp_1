@@ -1,12 +1,10 @@
 name: Pipeline - Build, Push, Test, and deploy CloudFormation Stack 
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - main 
-  workflow_dispatch:
-
-
+  
 jobs:
   build:
     name: Build and Push Docker Image
@@ -58,15 +56,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Configure AWS credentials for Elastic Beanstalk
+      # Configure AWS credentials for OIDC
       - name: Configure AWS credentials
         id: creds
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          
+          role-to-assume: "arn:aws:iam::831968218813:oidc-provider/token.actions.githubusercontent.com"
+          aws-region: ${{secrets.AWS_REGION}}
+
      # Deploy the CloudFormation stack
       - name: Deploy CloudFormation stack
         run: |
@@ -74,10 +71,3 @@ jobs:
           --template-file test2.yml \
           --stack-name testapp2-stack \
           --s3-bucket pipeline-testapp1-bucket \
-
-      # - name: Deploy to AWS CloudFormation
-      #   uses: aws-actions/aws-cloudformation-github-deploy@v1
-      #   with:
-      #     name: MyStack2
-      #     template: cloudformation-template.yml
-      #     no-fail-on-empty-changeset: "1"
