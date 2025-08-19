@@ -1,7 +1,7 @@
 # Dockerized E-Commerce Web Application
 
 ## Overview
-This project is a **Dockerized Java-based e-commerce web application** deployed on **AWS** using **CloudFormation**. It is designed for high availability and scalability, leveraging Docker containers on EC2 instances managed by an **Auto Scaling Group** behind an **Application Load Balancer (ALB)**. The application leverages script that pull the image and runs the applciation, allowing it to be available via mapping port 80 on the container to port 80 on the instance. OIDC has been configured and will be undergoing further testing as well. Status checks, linting, and other tools will be implemnted in the future to further imporve code.
+This project is a **Dockerized Java-based e-commerce web application** deployed on **AWS** using **CloudFormation**. It is designed for high availability and scalability, leveraging Docker containers on EC2 instances managed by an **Auto Scaling Group** behind an **Application Load Balancer (ALB)**. The application leverages a bash script that pulls the image from dockerhub and runs the applciation, allowing it to be available via mapping port 80 on the container to port 80 on the instance. OIDC has been configured and will be undergoing further testing. Status checks, linting, and other tools will be implemented in the future to further imporve code.
 
 ## Features
 - Web application containerized with **Docker**, exposing port 80.
